@@ -442,6 +442,11 @@ class DetectMultiBackend(nn.Module):
         elif pb:  # GraphDef https://www.tensorflow.org/guide/migrate#a_graphpb_or_graphpbtxt
             LOGGER.info(f'Loading {w} for TensorFlow GraphDef inference...')
             import tensorflow as tf
+            import openvino_tensorflow as ovtf
+            import tensorflow as tf
+            os.environ["OPENVINO_TF_CONVERT_VARIABLES_TO_CONSTANTS"] = "1"
+            if not use_ovtf:
+                ovtf.disable()
 
             def wrap_frozen_graph(gd, inputs, outputs):
                 x = tf.compat.v1.wrap_function(lambda: tf.compat.v1.import_graph_def(gd, name=""), [])  # wrapped
